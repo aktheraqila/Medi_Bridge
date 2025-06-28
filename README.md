@@ -1,10 +1,10 @@
-#🏥 MediBridge – Smart Doctor Finder & Appointment Booking App
+# 🏥 MediBridge – Smart Doctor Finder & Appointment Booking App
 
 MediBridge is a lightweight Android app designed to help users find doctors and book appointments quickly — no login required. Built for simplicity, speed, and accessibility, it's ideal for anyone looking for a seamless healthcare experience.
 
 ---
 
-📱 Features
+## 📱 Features
 
 - Browse doctors by name, specialization, or hospital  
 - Search and filter by city, department, or hospital  
@@ -15,20 +15,20 @@ MediBridge is a lightweight Android app designed to help users find doctors and 
 
 ---
 
-🔧 Tech Stack
+## 🔧 Tech Stack
 
-Layer | Technology  
-------|------------  
-Language | Kotlin  
-UI | XML (Material Design)  
-Architecture | MVVM  
-Backend | Firebase Firestore (real-time)  
-Storage | Firebase Storage (doctor images)  
-Image Loading | Glide / Coil  
+| Layer         | Technology                     |
+| ------------- | ------------------------------|
+| Language      | Kotlin                        |
+| UI            | XML (Material Design)          |
+| Architecture  | MVVM                          |
+| Backend       | Firebase Firestore (real-time)|
+| Storage       | Firebase Storage (doctor images) |
+| Image Loading | Glide / Coil                  |
 
 ---
 
-🛠 Setup Instructions
+## 🛠 Setup Instructions
 
 1. Clone this repository.  
 2. Create a Firebase project and enable Firestore and Storage.  
@@ -38,20 +38,20 @@ Image Loading | Glide / Coil
 
 ---
 
-🚧 Project Status
+## 🚧 Project Status
 
 The project is in active development. Core features such as browsing doctors, appointment booking, and Firebase integration are being implemented step-by-step.
 
 ---
 
-👨‍💻 Team Members
+## 👨‍💻 Team Members
 
 - Aqila Akther Siddiquee – Developer  
 - Abu Baker – Developer  
 
 ---
 
-🔗 Project Link
+## 🔗 Project Link
 
 GitHub Repository – MediBridge  
 https://github.com/aktheraqila/Medi_Bridge
