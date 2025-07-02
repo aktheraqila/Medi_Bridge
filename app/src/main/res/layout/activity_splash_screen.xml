@@ -18,6 +18,7 @@
         app:srcCompat="@drawable/background_green" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="325dp"
         android:background="@drawable/top_corner_white_bg"
@@ -30,26 +31,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textColor="@color/black"
+            android:text="@string/consult_only_with_a_n_a_doctor_you_trust"
             android:textAlignment="center"
+            android:textColor="@color/black"
             android:textSize="40sp"
             android:textStyle="bold"
-            android:text="@string/consult_only_with_a_n_a_doctor_you_trust"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/startBtn"
+            style="@android:style/Widget.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
-            android:text="Get Started"
             android:background="@drawable/green_bg"
-            style="@android:style/Widget.Button"
+            android:text="Get Started"
             android:textColor="@color/white"
-            android:textStyle="bold"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -58,11 +59,21 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="We can help you to find available\n doctor appoinment near you"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/startBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/women" />
 </androidx.constraintlayout.widget.ConstraintLayout>
