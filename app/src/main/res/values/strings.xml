@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Medi_Bridge</string>
     <string name="schedule_appointment_n_with_ease">Schedule Appointment\n with Ease</string>
-    <string name="consult_only_with_a_n_a_doctor_you_trust">Consult only with a<font color = '#1FC29D'>\n a Doctor you trust</font></string>
+    <string name="consult_only_with_a_n_a_doctor_you_trust">Consult only with a<font color = '#1FC29D'>\nDoctor you trust</font></string>
 </resources>
