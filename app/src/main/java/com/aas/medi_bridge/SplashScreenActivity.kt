@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.aas.medi_bridge.databinding.ActivitySplashScreenBinding
 
-class SplashScreenActivity : AppCompatActivity() {
+class SplashScreenActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySplashScreenBinding
 
