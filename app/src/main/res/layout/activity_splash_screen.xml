@@ -59,7 +59,7 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/we_can_help_you_to_find_available_n_doctor_appointment_near_you"
+            android:text="@string/we_can_help_you_to_find_available_n_doctor_appointments_near_you"
             android:textSize="18sp"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/startBtn"
