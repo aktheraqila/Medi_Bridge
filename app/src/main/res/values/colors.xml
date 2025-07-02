@@ -13,5 +13,10 @@
     <color name="PurpleBtn">#6735A4</color>
     <color name="blueCat">#1E73C5</color>
     <color name="brown">#F0D9C1</color>
-    <color name="lightGrey">#ECEDEF</color>
+
+    <color name="lightGreen">#e9f9f5</color>
+    <color name="darkGreen">#1fc29d</color>
+    <color name="grey">#acacac</color>
+    <color name="lightGrey">#dbdbdb</color>
+    
 </resources>
