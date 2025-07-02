@@ -30,12 +30,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    viewBinding {
-        enable = true
-    }
-
     kotlinOptions {
         jvmTarget = "11"
+    }
+
+    buildFeatures{
+        viewBinding = true
     }
 }
 
@@ -52,4 +52,7 @@ dependencies {
 
     // Bumptech Glide
     implementation(libs.glide)
+
+    // chip navigation bar
+    implementation(libs.chip.navigation.bar)
 }
