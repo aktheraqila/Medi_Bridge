@@ -1,29 +1,20 @@
 package com.aas.medi_bridge
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.aas.medi_bridge.databinding.ActivitySplashScreenBinding
 
-class SplashScreenActivity : BaseActivity() {
-
-    private lateinit var binding: ActivitySplashScreenBinding
-
+class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashScreenBinding.inflate((layoutInflater))
-        setContentView(binding.root)
-
-        binding.apply{
-            startBtn.setOnClickListener {
-                startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
-            }
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_splash_screen)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
-
-
     }
 }
