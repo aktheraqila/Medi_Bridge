@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Medi_Bridge</string>
+
     <string name="schedule_appointment_n_with_ease">Schedule Appointment\n with Ease</string>
     <string name="consult_only_with_a_n_a_doctor_you_trust">Consult only with a<font color = '#1FC29D'>\nDoctor you trust</font></string>
     <string name="we_can_help_you_to_find_available_n_doctor_appointments_near_you">We can help you to find available\n doctor appointments near you</string>
     <string name="get_started">Get Started</string>
     <string name="background_image">Background Image</string>
+
 </resources>
