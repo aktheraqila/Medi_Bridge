@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aas.medi_bridge.Adapter.TopDoctorAdapter2
+import com.aas.medi_bridge.Adapter.TopDoctorAdapter3
 import com.aas.medi_bridge.ViewModel.MainviewModel
 import com.aas.medi_bridge.databinding.ActivityTopDoctorsBinding
 
@@ -23,9 +23,20 @@ class TopDoctorsActivity : BaseActivity() {
     private fun initDoctor() {
         binding.progressBarTopDoctor.visibility = View.VISIBLE
         viewModel.doctors.observe(this) { doctors ->
-            binding.viewTopDoctor.layoutManager = LinearLayoutManager(this@TopDoctorsActivity, LinearLayoutManager.VERTICAL, false)
-            binding.viewTopDoctor.adapter = TopDoctorAdapter2((doctors ?: emptyList()).toMutableList())
-            binding.progressBarTopDoctor.visibility = View.GONE
+            try {
+                if (doctors != null && doctors.isNotEmpty()) {
+                    binding.viewTopDoctor.layoutManager = LinearLayoutManager(this@TopDoctorsActivity, LinearLayoutManager.VERTICAL, false)
+                    binding.viewTopDoctor.adapter = TopDoctorAdapter3(doctors.toMutableList())
+                } else {
+                    // Handle empty or null doctor list
+                    android.util.Log.w("TopDoctorsActivity", "No doctors data available")
+                    binding.viewTopDoctor.adapter = TopDoctorAdapter3(mutableListOf())
+                }
+                binding.progressBarTopDoctor.visibility = View.GONE
+            } catch (e: Exception) {
+                android.util.Log.e("TopDoctorsActivity", "Error loading doctors: ${e.message}")
+                binding.progressBarTopDoctor.visibility = View.GONE
+            }
         }
         viewModel.loadDoctors()
         binding.backBtn.setOnClickListener { finish() }

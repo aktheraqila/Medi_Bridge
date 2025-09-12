@@ -14,11 +14,14 @@ class IntroActivity : BaseActivity() {
 
 
         binding.apply {
-            buttonCloud.setOnClickListener {
+            // Patient button - navigate to MainActivity (patient flow)
+            patientbutton.setOnClickListener {
                 val intent = Intent(this@IntroActivity, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             }
+
+
         }
 
     }

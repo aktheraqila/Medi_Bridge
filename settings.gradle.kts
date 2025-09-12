@@ -27,4 +27,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Medi_Bridge"
 include(":app")
- 

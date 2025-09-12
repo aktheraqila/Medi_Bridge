@@ -15,8 +15,8 @@ data class DoctorsModel(
     val bio: String = "",
     val address: String = "",
     val experience: Int = 0,
-    val Mobile: String = "",
-    val Site: String = "",
+    val mobile: String = "",
+    val site: String = "",
     val location: String = "",
     val chambers: List<Chamber> = emptyList(),
     val visiting_hour: String = ""
@@ -53,8 +53,8 @@ data class DoctorsModel(
         parcel.writeString(bio)
         parcel.writeString(address)
         parcel.writeInt(experience)
-        parcel.writeString(Mobile)
-        parcel.writeString(Site)
+        parcel.writeString(mobile)
+        parcel.writeString(site)
         parcel.writeString(location)
         parcel.writeTypedList(chambers)
         parcel.writeString(visiting_hour)

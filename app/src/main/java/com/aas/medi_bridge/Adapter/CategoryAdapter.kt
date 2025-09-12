@@ -27,23 +27,20 @@ class CategoryAdapter(
 
     override fun onBindViewHolder(holder: CategoryAdapter.ViewHolder, position: Int) {
         val item = items[position]
-        holder.binding.titleTxt.text=item.Name
+        holder.binding.titleTxt.text = item.name
 
         // Convert Imgur URL to direct image URL
-        val imageUrl = if (item.Picture.contains("imgur.com") && !item.Picture.contains("i.imgur.com")) {
+        val imageUrl = if (item.picture.contains("imgur.com") && !item.picture.contains("i.imgur.com")) {
             // Convert imgur.com/abc to i.imgur.com/abc.jpg
-            val imageId = item.Picture.substringAfterLast("/")
+            val imageId = item.picture.substringAfterLast("/")
             "https://i.imgur.com/$imageId.jpg"
         } else {
-            item.Picture
+            item.picture
         }
-
         Glide.with(context)
             .load(imageUrl)
-            .placeholder(android.R.drawable.ic_menu_gallery) // Show placeholder while loading
-            .error(android.R.drawable.ic_menu_gallery) // Show error image if loading fails
             .into(holder.binding.img)
-        // Add click listener
+
         holder.binding.root.setOnClickListener {
             onItemClick?.invoke(item)
         }

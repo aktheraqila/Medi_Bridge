@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:elevation="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header with Doctor Name and ID -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/doctorNameText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dr. John Doe"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/doctorIdText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ID: DR123456"
+                android:textColor="@color/purple"
+                android:textSize="12sp"
+                android:background="@drawable/purple_bg"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Doctor Email -->
+        <TextView
+            android:id="@+id/doctorEmailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="john.doe@example.com"
+            android:textColor="@color/darkgrey"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Message -->
+        <TextView
+            android:id="@+id/messageText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New doctor registration request"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Timestamp -->
+        <TextView
+            android:id="@+id/timestampText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dec 07, 2024 - 14:30"
+            android:textColor="@color/darkgrey"
+            android:textSize="12sp"
+            android:gravity="end" />
+
+        <!-- Action Hint -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Tap to review and approve"
+            android:textColor="@color/purple"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

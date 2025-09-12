@@ -1,7 +1,7 @@
 package com.aas.medi_bridge.Domain
 
 data class CategoryModel(
-    val Id: Int = 0,
-    val Name: String = "",
-    val Picture: String = "" // Changed from Int to String to handle Firebase URL data
+    val id: Int = 0,
+    val name: String = "",
+    val picture: String = "" // Consistent naming convention
 )

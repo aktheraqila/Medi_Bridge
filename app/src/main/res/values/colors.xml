@@ -12,4 +12,12 @@
     <color name="grey">#8B8B8B</color>
     <color name="darkgrey">#2B2B2B</color>
     <color name="lightGrey">#dbdbdb</color>
+    <color name="blue">#2196F3</color>
+    <color name="lightBlue">#E3F2FD</color>
+    <color name="darkBlue">#1976D2</color>
+    <color name="red">#C40000</color>
+    <color name="green">#00CD34</color>
+    <color name="orange">#E63C0D</color>
+    <color name="light_green">#ABEDAB</color>
+    <color name="light_red">#F38C99</color>
 </resources>
