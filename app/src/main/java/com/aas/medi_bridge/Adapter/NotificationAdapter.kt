@@ -38,7 +38,7 @@ class NotificationAdapter(private val notifications: MutableList<AppointmentNoti
 
         fun bind(notification: AppointmentNotification) {
             binding.apply {
-                tvDoctorName.text = "Dr. ${notification.doctorName}"
+                tvDoctorName.text = "${notification.doctorName}"
                 tvAppointmentDate.text = notification.appointmentDate
                 tvAppointmentTime.text = notification.appointmentTime
                 tvPatientName.text = "Patient: ${notification.patientName}"
@@ -66,7 +66,7 @@ class NotificationAdapter(private val notifications: MutableList<AppointmentNoti
 
                 // Create the detailed message format
                 val formattedMessage = "Dear ${notification.patientName},\n\n" +
-                        "Your appointment has been confirmed with Dr. ${notification.doctorName}.\n\n" +
+                        "Your appointment has been confirmed with ${notification.doctorName}.\n\n" +
                         "Date: ${notification.appointmentDate}\n" +
                         "Time: ${notification.appointmentTime}\n\n" +
                         "Please arrive 15 minutes before your appointed time.\n" +

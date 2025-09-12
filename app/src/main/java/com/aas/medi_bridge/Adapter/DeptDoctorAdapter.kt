@@ -8,17 +8,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aas.medi_bridge.Activity.DetailActivity
 import com.aas.medi_bridge.Domain.DoctorsModel
-import com.aas.medi_bridge.databinding.ViewholderTopDoctor2Binding
+import com.aas.medi_bridge.databinding.ViewholderTopDoctor3Binding
 import com.bumptech.glide.Glide
 
 class DeptDoctorAdapter(val items: MutableList<DoctorsModel>) : RecyclerView.Adapter<DeptDoctorAdapter.ViewHolder>() {
     private var context: Context? = null
 
-    class ViewHolder(val binding: ViewholderTopDoctor2Binding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: ViewholderTopDoctor3Binding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
-        val binding = ViewholderTopDoctor2Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ViewholderTopDoctor3Binding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -27,8 +27,7 @@ class DeptDoctorAdapter(val items: MutableList<DoctorsModel>) : RecyclerView.Ada
         Log.d("DeptDoctorAdapter", "Binding doctor: ${doctor.name}, specialization: ${doctor.specialization}, rating: ${doctor.rating}")
         holder.binding.nameTxt.text = doctor.name
         holder.binding.specialTxt.text = doctor.specialization
-        holder.binding.scoreTxt.text = doctor.rating.toString()
-        holder.binding.degreeTxt.text = doctor.degrees
+
         // Fix: Ensure rating is a valid Float
         val ratingFloat = when (doctor.rating) {
             is Float -> doctor.rating
@@ -37,7 +36,6 @@ class DeptDoctorAdapter(val items: MutableList<DoctorsModel>) : RecyclerView.Ada
             is String -> doctor.rating.toFloatOrNull() ?: 0f
             else -> 0f
         }
-        holder.binding.ratingBar.rating = ratingFloat
         // Load image
         var imageUrl = doctor.image
         if (imageUrl.isBlank() && doctor.chambers.isNotEmpty()) {

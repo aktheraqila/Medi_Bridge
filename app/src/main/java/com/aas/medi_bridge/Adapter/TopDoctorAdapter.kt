@@ -32,7 +32,6 @@ class TopDoctorAdapter(val items: MutableList<DoctorsModel>): RecyclerView.Adapt
             // Safely bind text fields with null checks
             holder.binding.nameTxt.text = doctor.name.takeIf { it.isNotBlank() } ?: "Unknown Doctor"
             holder.binding.specialTxt.text = doctor.specialization.takeIf { it.isNotBlank() } ?: "General Practice"
-            holder.binding.scoreTxt.text = if (doctor.rating > 0.0) doctor.rating.toString() else "N/A"
 
             // Safely get doctor image with proper fallback chain
             var imageUrl = ""
@@ -66,7 +65,6 @@ class TopDoctorAdapter(val items: MutableList<DoctorsModel>): RecyclerView.Adapt
             // Set fallback values to prevent blank items
             holder.binding.nameTxt.text = "Error Loading Doctor"
             holder.binding.specialTxt.text = "Please try again"
-            holder.binding.scoreTxt.text = "N/A"
         }
     }
 

@@ -17,20 +17,7 @@
     <color name="darkBlue">#1976D2</color>
     <color name="red">#C40000</color>
     <color name="green">#00CD34</color>
-
-    <!-- Time Slot Colors -->
-    <color name="time_slot_available_bg">#F8F9FA</color>
-    <color name="time_slot_available_text">#374151</color>
-    <color name="time_slot_available_border">#E5E7EB</color>
-
-    <color name="time_slot_selected_bg">#3B82F6</color>
-    <color name="time_slot_selected_text">#FFFFFF</color>
-    <color name="time_slot_selected_border">#2563EB</color>
-
-    <color name="time_slot_booked_bg">#FEE2E2</color>
-    <color name="time_slot_booked_text">#991B1B</color>
-    <color name="time_slot_booked_border">#FECACA</color>
-
-    <color name="time_slot_pressed_bg">#EBF4FF</color>
-    <color name="time_slot_pressed_text">#1E40AF</color>
+    <color name="orange">#E63C0D</color>
+    <color name="light_green">#ABEDAB</color>
+    <color name="light_red">#F38C99</color>
 </resources>

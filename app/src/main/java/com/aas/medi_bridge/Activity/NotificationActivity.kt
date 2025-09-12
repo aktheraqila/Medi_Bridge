@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aas.medi_bridge.Adapter.NotificationAdapter
 import com.aas.medi_bridge.Domain.AppointmentNotification
 import com.aas.medi_bridge.databinding.ActivityNotificationBinding
+import androidx.core.content.edit
 
 class NotificationActivity : BaseActivity() {
 
@@ -14,6 +15,7 @@ class NotificationActivity : BaseActivity() {
     private lateinit var notificationAdapter: NotificationAdapter
     private val appointmentsList = mutableListOf<AppointmentNotification>()
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var readNotificationsPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,7 @@ class NotificationActivity : BaseActivity() {
 
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("appointment_notifications", MODE_PRIVATE)
+        readNotificationsPrefs = getSharedPreferences("read_notifications", MODE_PRIVATE)
     }
 
     private fun loadLocalNotifications() {
@@ -92,6 +95,9 @@ class NotificationActivity : BaseActivity() {
                 // Sort by timestamp (newest first)
                 appointmentsList.sortByDescending { it.timestamp }
 
+                // Mark all notifications as read when activity is opened
+                markAllNotificationsAsRead()
+
                 // Hide loading and update UI
                 hideLoading()
 
@@ -109,7 +115,8 @@ class NotificationActivity : BaseActivity() {
                         }
                     }
 
-                    updateNotificationCount(appointmentsList.size)
+                    // Update notification count to 0 since all are now read
+                    updateNotificationCount(0)
                 }
 
             } catch (e: Exception) {
@@ -117,6 +124,14 @@ class NotificationActivity : BaseActivity() {
                 showEmptyState()
             }
         }, 300) // Short delay to show loading
+    }
+
+    private fun markAllNotificationsAsRead() {
+        val editor = readNotificationsPrefs.edit()
+        appointmentsList.forEach { notification ->
+            editor.putBoolean(notification.id, true)
+        }
+        editor.apply()
     }
 
     private fun showLoading() {
@@ -171,9 +186,49 @@ class NotificationActivity : BaseActivity() {
                 updatedAppointments.add(appointmentData)
 
                 // Save back to SharedPreferences
-                sharedPreferences.edit()
-                    .putStringSet("appointments_simple", updatedAppointments)
-                    .commit()
+                sharedPreferences.edit(commit = true) {
+                    putStringSet("appointments_simple", updatedAppointments)
+                }
+
+                // Update notification count in MainActivity
+                updateUnreadNotificationCount(context)
+
+            } catch (e: Exception) {
+                // Handle error silently
+            }
+        }
+
+        private fun updateUnreadNotificationCount(context: android.content.Context) {
+            try {
+                val appointmentsPrefs = context.getSharedPreferences("appointment_notifications", android.content.Context.MODE_PRIVATE)
+                val readNotificationsPrefs = context.getSharedPreferences("read_notifications", android.content.Context.MODE_PRIVATE)
+                val notificationCountPrefs = context.getSharedPreferences("notifications", android.content.Context.MODE_PRIVATE)
+
+                // Get all appointments
+                val appointmentsStringSet = appointmentsPrefs.getStringSet("appointments_simple", mutableSetOf()) ?: mutableSetOf()
+                
+                // Count unread notifications
+                var unreadCount = 0
+                appointmentsStringSet.forEach { appointmentString ->
+                    try {
+                        val parts = appointmentString.split("|")
+                        if (parts.size >= 5) {
+                            val timestamp = parts[4].toLongOrNull() ?: System.currentTimeMillis()
+                            val notificationId = timestamp.toString()
+                            
+                            // Check if this notification is read
+                            val isRead = readNotificationsPrefs.getBoolean(notificationId, false)
+                            if (!isRead) {
+                                unreadCount++
+                            }
+                        }
+                    } catch (e: Exception) {
+                        // Skip invalid entries
+                    }
+                }
+
+                // Update notification count
+                notificationCountPrefs.edit().putInt("notification_count", unreadCount).apply()
 
             } catch (e: Exception) {
                 // Handle error silently

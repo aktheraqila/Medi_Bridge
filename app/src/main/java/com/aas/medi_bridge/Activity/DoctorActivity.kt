@@ -15,6 +15,7 @@ import androidx.core.content.edit
 import com.aas.medi_bridge.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.*
+import kotlin.or
 
 class DoctorActivity : AppCompatActivity() {
 
@@ -94,7 +95,12 @@ class DoctorActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        backBtn.setOnClickListener { finish() }
+        backBtn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+        }
 
         primaryActionBtn.setOnClickListener {
             if (isLoginMode) {

@@ -5,7 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aas.medi_bridge.Adapter.TopDoctorAdapter
+import com.aas.medi_bridge.Adapter.TopDoctorAdapter3
 import com.aas.medi_bridge.Domain.DoctorsModel
 import com.aas.medi_bridge.ViewModel.MainviewModel
 import com.aas.medi_bridge.databinding.ActivitySearchBinding
@@ -15,7 +15,8 @@ class SearchActivity : BaseActivity() {
     private lateinit var binding: ActivitySearchBinding
     private val viewModel = MainviewModel()
     private var allDoctors: MutableList<DoctorsModel> = mutableListOf()
-    private lateinit var searchResultsAdapter: TopDoctorAdapter
+    private lateinit var searchResultsAdapter: TopDoctorAdapter3
+    private lateinit var allDoctorsAdapter: TopDoctorAdapter3 // Updated to use TopDoctorAdapter3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,13 +25,19 @@ class SearchActivity : BaseActivity() {
 
         initSearch()
         loadDoctors()
-        setupRecyclerView()
+        setupRecyclerViews() // Updated method name
     }
 
-    private fun setupRecyclerView() {
-        searchResultsAdapter = TopDoctorAdapter(mutableListOf())
+    private fun setupRecyclerViews() {
+        // Setup search results RecyclerView
+        searchResultsAdapter = TopDoctorAdapter3(mutableListOf())
         binding.searchResultsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.searchResultsRecyclerView.adapter = searchResultsAdapter
+
+        // Setup all doctors RecyclerView (the main one that shows all doctors)
+        allDoctorsAdapter = TopDoctorAdapter3(mutableListOf())
+        binding.doctorRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.doctorRecyclerView.adapter = allDoctorsAdapter
     }
 
     private fun initSearch() {
@@ -53,24 +60,47 @@ class SearchActivity : BaseActivity() {
     }
 
     private fun loadDoctors() {
-        binding.progressBar.visibility = View.VISIBLE
+        // Show progress
+        binding.progressCard.visibility = View.VISIBLE
+        binding.doctorCard.visibility = View.GONE
+        binding.searchResultsCard.visibility = View.GONE
+        binding.searchHintContainer.visibility = View.GONE
+
         viewModel.doctors.observe(this) { doctorsList ->
             allDoctors = doctorsList
-            binding.progressBar.visibility = View.GONE
+            binding.progressCard.visibility = View.GONE
+            android.util.Log.d("SearchActivity", "Loaded ${allDoctors.size} doctors")
+
+            // Show all doctors initially when data is loaded
+            showAllDoctors()
         }
         viewModel.loadDoctors()
     }
 
+    private fun showAllDoctors() {
+        // Show the all doctors container and hide others
+        binding.doctorCard.visibility = View.VISIBLE
+        binding.searchResultsCard.visibility = View.GONE
+        binding.searchHintContainer.visibility = View.GONE
+
+        // Update the all doctors adapter
+        allDoctorsAdapter.apply {
+            items.clear()
+            items.addAll(allDoctors)
+            notifyDataSetChanged()
+        }
+
+        android.util.Log.d("SearchActivity", "Displaying all ${allDoctors.size} doctors")
+    }
+
     private fun performSearch(query: String) {
         if (query.isEmpty()) {
-            // Show hint and hide results
-            binding.searchHintText.visibility = View.VISIBLE
-            binding.searchResultsRecyclerView.visibility = View.GONE
-            binding.searchHintText.text = "Search by doctor name, specialization, designation, or hospital name"
+            // Show all doctors when search is empty
+            showAllDoctors()
             return
         }
 
-        // Search across ALL relevant fields - not just name
+        // Search across ALL relevant fields
         val matchingDoctors = allDoctors.filter { doctor ->
             val hospitalName = if (doctor.chambers.isNotEmpty()) {
                 doctor.chambers[0].name
@@ -79,22 +109,27 @@ class SearchActivity : BaseActivity() {
             }
 
             doctor.name.contains(query, ignoreCase = true) ||
-            doctor.specialization.contains(query, ignoreCase = true) ||
-            doctor.designation.contains(query, ignoreCase = true) ||
-            hospitalName.contains(query, ignoreCase = true) ||
-            doctor.address.contains(query, ignoreCase = true) ||
-            doctor.location.contains(query, ignoreCase = true)
+                    doctor.specialization.contains(query, ignoreCase = true) ||
+                    doctor.designation.contains(query, ignoreCase = true) ||
+                    hospitalName.contains(query, ignoreCase = true) ||
+                    doctor.address.contains(query, ignoreCase = true) ||
+                    doctor.location.contains(query, ignoreCase = true)
         }
+
+        android.util.Log.d("SearchActivity", "Found ${matchingDoctors.size} matches for '$query'")
 
         // Show results or no results message
         if (matchingDoctors.isEmpty()) {
-            binding.searchHintText.visibility = View.VISIBLE
-            binding.searchResultsRecyclerView.visibility = View.GONE
-            binding.searchHintText.text = "No doctors found for \"$query\""
+            // Show no results state
+            binding.doctorCard.visibility = View.GONE
+            binding.searchResultsCard.visibility = View.GONE
+            binding.searchHintContainer.visibility = View.VISIBLE
+            binding.searchHintText.text = "No doctors found for \"$query\"\nTry different keywords"
         } else {
-            // Show the list of matching doctors
-            binding.searchHintText.visibility = View.GONE
-            binding.searchResultsRecyclerView.visibility = View.VISIBLE
+            // Show search results
+            binding.doctorCard.visibility = View.GONE
+            binding.searchResultsCard.visibility = View.VISIBLE
+            binding.searchHintContainer.visibility = View.GONE
 
             searchResultsAdapter.apply {
                 items.clear()

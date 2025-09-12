@@ -110,6 +110,8 @@ class MainActivity : BaseActivity() {
 
         // Search button
         binding.searchLayout.setOnClickListener {
+            resetBottomNavigation()
+            setActiveNavItem("doctors")
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
@@ -136,7 +138,7 @@ class MainActivity : BaseActivity() {
         binding.textViewHome.setTextColor(getColor(R.color.darkgrey))
         binding.textViewHome.setTypeface(null, android.graphics.Typeface.NORMAL)
 
-        binding.imageViewSearch.setImageResource(R.drawable.search_black)
+        binding.imageViewStethecope.setImageResource(R.drawable.stethoscopes)
         binding.textViewSearch.setTextColor(getColor(R.color.darkgrey))
 
         binding.imageViewNotification.setImageResource(R.drawable.notification_black)
@@ -153,8 +155,8 @@ class MainActivity : BaseActivity() {
                 binding.textViewHome.setTextColor(getColor(R.color.purple))
                 binding.textViewHome.setTypeface(null, android.graphics.Typeface.BOLD)
             }
-            "search" -> {
-                binding.imageViewSearch.setImageResource(R.drawable.search_purple)
+            "doctors" -> {
+                binding.imageViewStethecope.setImageResource(R.drawable.stethoscopes_purple)
                 binding.textViewSearch.setTextColor(getColor(R.color.purple))
             }
             "notification" -> {
@@ -192,5 +194,51 @@ class MainActivity : BaseActivity() {
         val sharedPref = getSharedPreferences("notifications", MODE_PRIVATE)
         val notificationCount = sharedPref.getInt("notification_count", 0)
         updateNotificationBadge(notificationCount)
+
+        // Also calculate unread count to ensure accuracy
+        calculateAndUpdateUnreadCount()
+    }
+
+    private fun calculateAndUpdateUnreadCount() {
+        try {
+            val appointmentsPrefs = getSharedPreferences("appointment_notifications", MODE_PRIVATE)
+            val readNotificationsPrefs = getSharedPreferences("read_notifications", MODE_PRIVATE)
+
+            // Get all appointments
+            val appointmentsStringSet = appointmentsPrefs.getStringSet("appointments_simple", mutableSetOf()) ?: mutableSetOf()
+
+            // Count unread notifications
+            var unreadCount = 0
+            for (appointmentString in appointmentsStringSet) {
+                try {
+                    val parts = appointmentString.split("|")
+                    if (parts.size >= 5) {
+                        val timestamp = parts[4].toLongOrNull() ?: System.currentTimeMillis()
+                        val notificationId = timestamp.toString()
+
+                        // Check if this notification is read
+                        val isRead = readNotificationsPrefs.getBoolean(notificationId, false)
+                        if (!isRead) {
+                            unreadCount++
+                        }
+                    }
+                } catch (e: Exception) {
+                    // Skip invalid entries
+                }
+            }
+
+            // Update the badge with accurate unread count
+            updateNotificationBadge(unreadCount)
+
+            // Save the accurate count
+            val sharedPref = getSharedPreferences("notifications", MODE_PRIVATE)
+            with(sharedPref.edit()) {
+                putInt("notification_count", unreadCount)
+                apply()
+            }
+
+        } catch (e: Exception) {
+            // Handle error silently
+        }
     }
 }

@@ -21,11 +21,7 @@ class IntroActivity : BaseActivity() {
                 startActivity(intent)
             }
 
-            // Doctor button - navigate to DoctorActivity (doctor portal)
-            docbutton.setOnClickListener {
-                val intent = Intent(this@IntroActivity, DoctorActivity::class.java)
-                startActivity(intent)
-            }
+
         }
 
     }
