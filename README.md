@@ -1,4 +1,4 @@
-# 🏥 MediBridge – Smart Doctor Directory & Appointment Booking App
+# 🏥 MediBridge – Smart Doctor Finder & Appointment Booking App
 
 MediBridge is a lightweight Android app designed to help users find doctors and book appointments quickly — no login required. Built for simplicity, speed, and accessibility, it's ideal for anyone looking for a seamless healthcare experience.
 
@@ -23,7 +23,7 @@ MediBridge is a lightweight Android app designed to help users find doctors and 
 | UI            | XML (Material Design)          |
 | Architecture  | MVVM                          |
 | Backend       | Firebase Firestore (real-time)|
-| Storage       | Firebase Storage (doctor images) |
+| Storage       | Imgur (doctor images) |
 | Image Loading | Glide / Coil                  |
 
 ---

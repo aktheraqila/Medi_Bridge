@@ -1033,14 +1033,15 @@ class AppointmentFormActivity : AppCompatActivity() {
     }
 
     private fun setupSpinners() {
+
         // Setup Gender Spinner with placeholder
         val genderOptions = arrayOf("Please select", "Male", "Female")
 
         // Create custom adapter with simpler approach
+    
         val genderAdapter = object : ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genderOptions) {
 
             override fun isEnabled(position: Int): Boolean {
-                // Disable the first item (placeholder)
                 return position != 0
             }
 
@@ -1048,12 +1049,13 @@ class AppointmentFormActivity : AppCompatActivity() {
                 val view = super.getView(position, convertView, parent)
                 val textView = view as TextView
 
+
                 // Style the main display text
+
                 textView.setPadding(16, 16, 16, 16)
                 textView.textSize = 16f
 
                 if (position == 0) {
-                    // Set placeholder text color to gray
                     textView.setTextColor(Color.parseColor("#9CA3AF"))
                 } else {
                     textView.setTextColor(Color.parseColor("#1f2937"))
@@ -1082,9 +1084,11 @@ class AppointmentFormActivity : AppCompatActivity() {
                     textView.isEnabled = true
                 }
 
+
                 return view
             }
         }
+
 
         // Set dropdown resource and apply to spinner
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -1101,11 +1105,12 @@ class AppointmentFormActivity : AppCompatActivity() {
         // Add selection listener
         binding.spinnerGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position > 0) { // Ignore placeholder selection
+                if (position > 0) {
                     val selectedGender = genderOptions[position]
                     android.util.Log.d("AppointmentForm", "Gender selected: $selectedGender")
 
                     // Update the text color after selection
+
                     (view as? TextView)?.setTextColor(Color.parseColor("#1f2937"))
                 }
             }
@@ -1283,15 +1288,15 @@ class AppointmentFormActivity : AppCompatActivity() {
                 return
             }
 
-            // Create appointment object matching AppointmentModel structure exactly
+            // Create appointment object with correct doctor information
             val appointmentData = mapOf(
                 "id" to appointmentId,
                 "patientName" to "$firstName $lastName",
                 "patientPhone" to contactNumber,
                 "appointmentDate" to selectedDate,
                 "appointmentTime" to selectedTime,
-                "doctorId" to doctorName, // Use doctor ID if available, otherwise doctor name
-                "doctorEmail" to email, // Use doctor email if available
+                "doctorId" to doctorName, // Use doctor name as ID since DoctorsModel has no unique ID field
+                "doctorEmail" to "", // DoctorsModel has no email field
                 "doctorName" to doctorName,
                 "status" to "pending",
                 "symptoms" to message,
