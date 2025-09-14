@@ -59,6 +59,19 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
+                <!-- Add this inside the Header Row LinearLayout, after tvStatus -->
+                <ImageView
+                    android:id="@+id/btnDelete"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/trash"
+                    android:contentDescription="Delete"
+                    android:layout_marginStart="8dp"
+                    app:tint="@color/red" />
+
+
             </LinearLayout>
 
             <!-- Patient Name -->
