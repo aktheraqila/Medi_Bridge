@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aas.medi_bridge.Domain.AppointmentNotification
 import com.aas.medi_bridge.R
 import com.aas.medi_bridge.databinding.ViewholderNotificationBinding
+import kotlin.collections.get
 
 class NotificationAdapter(private val notifications: MutableList<AppointmentNotification>) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
@@ -21,6 +22,14 @@ class NotificationAdapter(private val notifications: MutableList<AppointmentNoti
 
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
         holder.bind(notifications[position])
+        holder.binding.btnDelete.setOnClickListener {
+            val pos = holder.adapterPosition
+            if (pos != RecyclerView.NO_POSITION) {
+                notifications.removeAt(pos)
+                notifyItemRemoved(pos)
+            }
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -33,7 +42,7 @@ class NotificationAdapter(private val notifications: MutableList<AppointmentNoti
         notifyDataSetChanged()
     }
 
-    class NotificationViewHolder(private val binding: ViewholderNotificationBinding) :
+    class NotificationViewHolder(val binding: ViewholderNotificationBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(notification: AppointmentNotification) {
