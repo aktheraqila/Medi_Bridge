@@ -69,4 +69,5 @@
     <string name="message_optional">Message (Optional)</string>
     <string name="enter_any_additional_message_or_special_requirements">Enter any additional message or special requirements...</string>
     <string name="confirm_appointment">Confirm Appointment</string>
+    <string name="confirmed">CONFIRMED</string>
 </resources>
