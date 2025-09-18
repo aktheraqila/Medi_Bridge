@@ -1,3 +1,4 @@
+/*
 package com.aas.medi_bridge.Activity
 
 import android.content.SharedPreferences
@@ -230,6 +231,253 @@ class NotificationActivity : BaseActivity() {
                 // Update notification count
                 notificationCountPrefs.edit().putInt("notification_count", unreadCount).apply()
 
+            } catch (e: Exception) {
+                // Handle error silently
+            }
+        }
+    }
+}
+*/
+
+package com.aas.medi_bridge.Activity
+
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.aas.medi_bridge.Adapter.NotificationAdapter
+import com.aas.medi_bridge.Domain.AppointmentNotification
+import com.aas.medi_bridge.databinding.ActivityNotificationBinding
+import kotlin.collections.addAll
+import kotlin.text.clear
+
+class NotificationActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityNotificationBinding
+    private lateinit var notificationAdapter: NotificationAdapter
+    private val notifications = mutableListOf<AppointmentNotification>()
+    private lateinit var sharedPreferences: SharedPreferences
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityNotificationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        setupUI()
+        setupAdapter()
+        loadNotifications()
+
+        // Mark all notifications as read when activity is opened
+        markAllNotificationsAsRead()
+    }
+
+    private fun setupUI() {
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
+        sharedPreferences = getSharedPreferences("appointment_notifications", MODE_PRIVATE)
+    }
+
+    private fun setupAdapter() {
+        notificationAdapter = NotificationAdapter(notifications) { notification, position ->
+            deleteNotificationPermanently(notification, position)
+        }
+
+        binding.notificationRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@NotificationActivity)
+            adapter = notificationAdapter
+        }
+    }
+
+    private fun loadNotifications() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.emptyStateLayout.visibility = View.GONE
+        binding.notificationRecyclerView.visibility = View.GONE
+
+        try {
+            val appointmentsStringSet = sharedPreferences.getStringSet("appointments_simple", mutableSetOf()) ?: mutableSetOf()
+            val allNotifications = mutableListOf<AppointmentNotification>()
+
+            appointmentsStringSet.forEach { appointmentString ->
+                try {
+                    val parts = appointmentString.split("|")
+                    if (parts.size >= 5) {
+                        val patientName = parts[0].trim()
+                        val doctorName = parts[1].trim()
+                        val appointmentDate = parts[2].trim()
+                        val appointmentTime = parts[3].trim()
+                        val timestamp = parts[4].toLongOrNull() ?: System.currentTimeMillis()
+
+                        val appointment = AppointmentNotification(
+                            id = timestamp.toString(),
+                            patientName = patientName,
+                            patientPhone = "",
+                            appointmentDate = appointmentDate,
+                            appointmentTime = appointmentTime,
+                            doctorId = doctorName,
+                            doctorEmail = "",
+                            doctorName = doctorName,
+                            status = "confirmed",
+                            symptoms = "Appointment booked successfully",
+                            timestamp = timestamp
+                        )
+
+                        allNotifications.add(appointment)
+                    }
+                } catch (e: Exception) {
+                    // Skip invalid appointment entries
+                }
+            }
+
+            val deletedIds = getDeletedNotificationIds()
+            val filteredNotifications = allNotifications.filter { notification ->
+                !deletedIds.contains(notification.id)
+            }
+
+            notifications.clear()
+            notifications.addAll(filteredNotifications.sortedByDescending { it.timestamp })
+
+            // Mark notifications as read AFTER they are loaded
+            markAllNotificationsAsRead()
+
+            binding.progressBar.visibility = View.GONE
+
+            if (notifications.isEmpty()) {
+                binding.emptyStateLayout.visibility = View.VISIBLE
+                binding.notificationRecyclerView.visibility = View.GONE
+            } else {
+                binding.emptyStateLayout.visibility = View.GONE
+                binding.notificationRecyclerView.visibility = View.VISIBLE
+                notificationAdapter.notifyDataSetChanged()
+            }
+
+        } catch (e: Exception) {
+            binding.progressBar.visibility = View.GONE
+            binding.emptyStateLayout.visibility = View.VISIBLE
+            binding.notificationRecyclerView.visibility = View.GONE
+            Toast.makeText(this, "Failed to load notifications", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun markAllNotificationsAsRead() {
+        val readNotificationsPrefs = getSharedPreferences("read_notifications", MODE_PRIVATE)
+        val editor = readNotificationsPrefs.edit()
+
+        // Mark all current notifications as read
+        notifications.forEach { notification ->
+            editor.putBoolean(notification.id, true)
+        }
+
+        editor.apply()
+
+        // Update the notification count to 0
+        updateNotificationCount()
+    }
+
+    private fun updateNotificationCount() {
+        val notificationCountPrefs = getSharedPreferences("notifications", MODE_PRIVATE)
+        notificationCountPrefs.edit().putInt("notification_count", 0).apply()
+    }
+
+    private fun deleteNotificationPermanently(notification: AppointmentNotification, position: Int) {
+        saveDeletedNotificationId(notification.id)
+        notificationAdapter.removeNotification(position)
+        Toast.makeText(this, "Notification deleted", Toast.LENGTH_SHORT).show()
+
+        if (notifications.isEmpty()) {
+            binding.emptyStateLayout.visibility = View.VISIBLE
+            binding.notificationRecyclerView.visibility = View.GONE
+        }
+
+        // Update notification count after deletion
+        updateUnreadNotificationCount(this)
+    }
+
+    private fun saveDeletedNotificationId(notificationId: String) {
+        if (notificationId.isEmpty()) return
+
+        val sharedPref = getSharedPreferences("notification_prefs", Context.MODE_PRIVATE)
+        val deletedIds = sharedPref.getStringSet("deleted_notifications", mutableSetOf())?.toMutableSet()
+            ?: mutableSetOf()
+
+        deletedIds.add(notificationId)
+
+        sharedPref.edit()
+            .putStringSet("deleted_notifications", deletedIds)
+            .apply()
+    }
+
+    private fun getDeletedNotificationIds(): Set<String> {
+        val sharedPref = getSharedPreferences("notification_prefs", Context.MODE_PRIVATE)
+        return sharedPref.getStringSet("deleted_notifications", emptySet()) ?: emptySet()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadNotifications()
+    }
+
+    companion object {
+        fun saveAppointmentNotification(
+            context: android.content.Context,
+            doctorName: String,
+            patientName: String,
+            appointmentDate: String,
+            appointmentTime: String,
+            specialization: String = ""
+        ) {
+            try {
+                val sharedPreferences = context.getSharedPreferences("appointment_notifications", android.content.Context.MODE_PRIVATE)
+                val appointmentData = "$patientName|$doctorName|$appointmentDate|$appointmentTime|${System.currentTimeMillis()}"
+                val existingAppointments = sharedPreferences.getStringSet("appointments_simple", mutableSetOf()) ?: mutableSetOf()
+                val updatedAppointments = existingAppointments.toMutableSet()
+                updatedAppointments.add(appointmentData)
+
+                sharedPreferences.edit()
+                    .putStringSet("appointments_simple", updatedAppointments)
+                    .apply()
+
+                updateUnreadNotificationCount(context)
+            } catch (e: Exception) {
+                // Handle error silently
+            }
+        }
+
+        fun updateUnreadNotificationCount(context: android.content.Context) {
+            try {
+                val appointmentsPrefs = context.getSharedPreferences("appointment_notifications", android.content.Context.MODE_PRIVATE)
+                val readNotificationsPrefs = context.getSharedPreferences("read_notifications", android.content.Context.MODE_PRIVATE)
+                val notificationCountPrefs = context.getSharedPreferences("notifications", android.content.Context.MODE_PRIVATE)
+                val deletedNotificationsPrefs = context.getSharedPreferences("notification_prefs", android.content.Context.MODE_PRIVATE)
+
+                val appointmentsStringSet = appointmentsPrefs.getStringSet("appointments_simple", mutableSetOf()) ?: mutableSetOf()
+                val deletedIds = deletedNotificationsPrefs.getStringSet("deleted_notifications", emptySet()) ?: emptySet()
+
+                var unreadCount = 0
+                appointmentsStringSet.forEach { appointmentString ->
+                    try {
+                        val parts = appointmentString.split("|")
+                        if (parts.size >= 5) {
+                            val timestamp = parts[4].toLongOrNull() ?: System.currentTimeMillis()
+                            val notificationId = timestamp.toString()
+
+                            // Skip deleted notifications
+                            if (!deletedIds.contains(notificationId)) {
+                                val isRead = readNotificationsPrefs.getBoolean(notificationId, false)
+                                if (!isRead) {
+                                    unreadCount++
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        // Skip invalid entries
+                    }
+                }
+
+                notificationCountPrefs.edit().putInt("notification_count", unreadCount).apply()
             } catch (e: Exception) {
                 // Handle error silently
             }
