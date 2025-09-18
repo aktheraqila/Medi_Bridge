@@ -29,50 +29,63 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <!-- Header Row -->
-            <LinearLayout
+            <!-- Header Row - Changed to RelativeLayout for better control -->
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:minHeight="32dp">
 
+                <!-- Doctor Name - removed marginEnd and ellipsize to show full name -->
                 <TextView
                     android:id="@+id/tvDoctorName"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/statusDeleteContainer"
+                    android:layout_marginEnd="8dp"
                     android:text="Dr. John Doe"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvStatus"
+                <!-- Container for Status and Delete button -->
+                <LinearLayout
+                    android:id="@+id/statusDeleteContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/chip_background"
-                    android:paddingStart="8dp"
-                    android:paddingTop="4dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="4dp"
-                    android:text="@string/confirmed"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <!-- Add this inside the Header Row LinearLayout, after tvStatus -->
-                <ImageView
-                    android:id="@+id/btnDelete"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/trash"
-                    android:contentDescription="Delete"
-                    android:layout_marginStart="8dp"
-                    app:tint="@color/red" />
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/chip_background"
+                        android:paddingStart="8dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="4dp"
+                        android:text="@string/confirmed"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
+                    <ImageView
+                        android:id="@+id/btnDelete"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Delete"
+                        android:src="@drawable/trash"
+                        app:tint="@color/red" />
 
-            </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <!-- Patient Name -->
             <TextView
